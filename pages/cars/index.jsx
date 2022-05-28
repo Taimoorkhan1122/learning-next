@@ -1,40 +1,41 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const index = ({ cars }) => {
-  console.log(cars);
+import styles from "../../styles/chars.module.css";
+
+const index = ({ characters }) => {
+  const { results } = characters;
+
   return (
     <div>
       <div>Welcom to Cars sections</div>
-      <ul>
-        {cars.map((car, id) => (
-          <Link
-            key={`id+${car.model}`}
-            href={`${car.manufacturere}?${car.model}`}
-          >
-            <li>
-              <div>{car.manufacturere}</div>
-              <div>{car.model}</div>
-              <div>{car.color}</div>
-            </li>
+      <section className={styles.container}>
+        {results.map((char) => (
+          <Link key={char.id} href={char.name}>
+            <div className={styles.card}>
+              <div className={styles.image}>
+                <Image src={char.image} alt="character" layout="fill" />
+              </div>
+              <div className={styles.item}>Name: {char.name}</div>
+              <div className={styles.item}>Species: {char.species}</div>
+              <div className={styles.item}>Status: {char.status}</div>
+            </div>
           </Link>
         ))}
-      </ul>
+      </section>
     </div>
   );
 };
 
-export const getStaticProps = () => {
-  const cars = [
-    { manufacturere: "Audi", model: "A8", color: "Vibrant Blue" },
-    { manufacturere: "Ferrari", model: "F920", color: "Signature Red" },
-    { manufacturere: "Audi", model: "G47", color: "Black" },
-    { manufacturere: "Mercedez", model: "Mercedez Benz v11", color: "Gray" },
-  ];
+export const getStaticProps = async ({ context }) => {
+  const data = await fetch(`https://rickandmortyapi.com/api/character`).then(
+    (res) => res.json()
+  );
 
   return {
     props: {
-      cars,
+      characters: data,
     },
   };
 };
