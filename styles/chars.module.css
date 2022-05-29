@@ -35,7 +35,10 @@
     object-position: 0 10%;
     position: relative;
 }
-
+.itemsContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
 .item {
     background: rgb(11, 10, 10);
     color: #fff;
